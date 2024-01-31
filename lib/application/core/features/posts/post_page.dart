@@ -78,14 +78,14 @@ class PostPage extends StatelessWidget {
                             child: ListTile(
                               leading: CircleAvatar(
                                 radius: 25,
-                                child: Text("1"),
+                                child: Text(state.posts[index].id.toString()),
                               ),
                               title: Text(state.posts[index].title),
                               subtitle: Text(state.posts[index].body),
                             ),
                           );
                         },
-                        itemCount: 10,
+                        itemCount: state.posts.length,
                       );
                     } else if (state is PostStateError) {
                       return Center(
@@ -97,32 +97,7 @@ class PostPage extends StatelessWidget {
                 ),
               )
 
-              // Center(
-              //   child: CircularProgressIndicator(
-              //     color: Colors.blue,
-              //   ),
-              // ),
-              // Center(
-              //     child: Text("posts are loading",
-              //         style: themeData.textTheme.displayLarge)),
-              // Expanded(
-              //   child:
-              // ListView.builder(
-              //     itemBuilder: (context, index) {
-              //       return Card(
-              //         child: ListTile(
-              //           leading: CircleAvatar(
-              //             radius: 25,
-              //             child: Text("1"),
-              //           ),
-              //           title: Text("Post one"),
-              //           subtitle: Text("post one body"),
-              //         ),
-              //       );
-              //     },
-              //     itemCount: 10,
-              //   ),
-              // ),
+              
             ],
           ),
         ),
