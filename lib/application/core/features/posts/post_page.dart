@@ -1,6 +1,20 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:postbloc_app/application/core/features/posts/bloc/post_bloc.dart';
 import 'package:postbloc_app/application/core/services/theme_service.dart';
 import 'package:provider/provider.dart';
+
+class PostWrapper extends StatelessWidget {
+  const PostWrapper({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return BlocProvider(
+      create: (context) => PostBloc(),
+      child: PostPage(),
+    );
+  }
+}
 
 class PostPage extends StatelessWidget {
   const PostPage({super.key});
@@ -24,7 +38,12 @@ class PostPage extends StatelessWidget {
               onChanged: (_) {
                 Provider.of<ThemeServiceProvider>(context, listen: false)
                     .toggleTheme();
-              })
+              }),
+          IconButton(
+              onPressed: () {
+                BlocProvider.of<PostBloc>(context).add(PostRequestEvent());
+              },
+              icon: Icon(Icons.refresh))
         ],
       ),
       body: SizedBox(
@@ -40,31 +59,70 @@ class PostPage extends StatelessWidget {
                 "All Posts",
                 style: themeData.textTheme.displayLarge,
               ),
-              Center(
-                child: CircularProgressIndicator(
-                  color: Colors.blue,
-                ),
-              ),
-              Center(
-                  child: Text("posts are loading",
-                      style: themeData.textTheme.displayLarge)),
+
               Expanded(
-                child: ListView.builder(
-                  itemBuilder: (context, index) {
-                    return Card(
-                      child: ListTile(
-                        leading: CircleAvatar(
-                          radius: 25,
-                          child: Text("1"),
+                child: BlocBuilder<PostBloc, PostState>(
+                  builder: (context, state) {
+                    if (state is PostInitial) {
+                      return Text("posts are waiting to loaded");
+                    } else if (state is PostStateLoading) {
+                      return Center(
+                        child: CircularProgressIndicator(
+                          color: Colors.blue,
                         ),
-                        title: Text("Post one"),
-                        subtitle: Text("post one body"),
-                      ),
-                    );
+                      );
+                    } else if (state is PostStateLoaded) {
+                      return ListView.builder(
+                        itemBuilder: (context, index) {
+                          return Card(
+                            child: ListTile(
+                              leading: CircleAvatar(
+                                radius: 25,
+                                child: Text("1"),
+                              ),
+                              title: Text("Post one"),
+                              subtitle: Text("post one body"),
+                            ),
+                          );
+                        },
+                        itemCount: 10,
+                      );
+                    } else if (state is PostStateError) {
+                      return Center(
+                        child: Text("some thing went wrong"),
+                      );
+                    }
+                    return Text('nullll');
                   },
-                  itemCount: 10,
                 ),
-              ),
+              )
+
+              // Center(
+              //   child: CircularProgressIndicator(
+              //     color: Colors.blue,
+              //   ),
+              // ),
+              // Center(
+              //     child: Text("posts are loading",
+              //         style: themeData.textTheme.displayLarge)),
+              // Expanded(
+              //   child:
+              // ListView.builder(
+              //     itemBuilder: (context, index) {
+              //       return Card(
+              //         child: ListTile(
+              //           leading: CircleAvatar(
+              //             radius: 25,
+              //             child: Text("1"),
+              //           ),
+              //           title: Text("Post one"),
+              //           subtitle: Text("post one body"),
+              //         ),
+              //       );
+              //     },
+              //     itemCount: 10,
+              //   ),
+              // ),
             ],
           ),
         ),
