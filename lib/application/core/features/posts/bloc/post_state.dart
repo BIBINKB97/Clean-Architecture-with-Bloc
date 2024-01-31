@@ -12,8 +12,8 @@ sealed class PostState extends Equatable {
  class PostStateLoading extends PostState {}
 
  class PostStateLoaded extends PostState {
-  final List<Map<String, dynamic>> post;
-  const PostStateLoaded({required this.post});
+  final List<PostEntity> posts;
+  const PostStateLoaded({required this.posts});
   @override
   List<Object> get props => [];
 }

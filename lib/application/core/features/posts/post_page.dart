@@ -80,8 +80,8 @@ class PostPage extends StatelessWidget {
                                 radius: 25,
                                 child: Text("1"),
                               ),
-                              title: Text("Post one"),
-                              subtitle: Text("post one body"),
+                              title: Text(state.posts[index].title),
+                              subtitle: Text(state.posts[index].body),
                             ),
                           );
                         },
